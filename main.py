@@ -1,15 +1,17 @@
 import tkinter as tk
-from tkinter import messagebox as msb
-#from tkinter import ttk
+#para no tener que poner tk.messagebox, o tk.ttk
+from tkinter import messagebox as msb,ttk
+
 import random
 import time
-import sqlite3
 
-if __name__=='__main__':
+from ui.LoginScreen import LoginScreen
+def main():
     root = tk.Tk()
-    root.geometry('500x500+300+300')
-    root.title("Login form")
-    application= user(root)
+    app=LoginScreen(root)
+    root.title("Sistema de reserva de taxis")
     root.mainloop()
 
 
+if __name__ == main():
+    main()

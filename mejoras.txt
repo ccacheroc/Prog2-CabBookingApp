@@ -1,0 +1,5 @@
+- Usar método de hashing seguro para almacenar y verificar las contraseñas.
+Esto se puede hacer usando bibliotecas de terceros como bcrypt en Python,
+
+
+- Usar una clase para controlar el flujo de la app
