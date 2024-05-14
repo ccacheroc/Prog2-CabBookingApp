@@ -12,6 +12,8 @@ Esto se puede hacer usando bibliotecas de terceros como bcrypt en Python,
 
 - Filtrar también por coche de la flota
 
-- Jerarquía de herencia: usuarios como clase base, y separar administradores (los que se logan) de clientes (los que pueden alquilar coches)
+- Jerarquía de herencia: usuarios como clase base, y separar administradores (los que se logan y pueden añadir reservas) de clientes (los que pueden alquilar coches)
 
 - Añadir posibilidad de añadir clientes y administradores solo si estás logado.
+
+- Acceso a API externa para introducir dirección de origen y dirección de destino mediante mapa, y calcular distancia del trayecto y tiempo estimado
