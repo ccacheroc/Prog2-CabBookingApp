@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from data.user_repository import UserRepository
+from domain.usuario import Usuario
 from ui.BookingScreen import BookingScreen
 
 
@@ -39,33 +39,44 @@ class LoginScreen:
     def add_user(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
+
         if username and password:
-            result = UserRepository.add_user(username, password)
+            user = Usuario(username, password)
+            result = user.save()
             if result:
                 messagebox.showinfo("Éxito", "Usuario añadido correctamente")
+                self.username_entry.delete(0, tk.END)
+                self.password_entry.delete(0, tk.END)
+
             else:
                 messagebox.showerror("Error", "No se pudo añadir al usuario")
+
         else:
             messagebox.showwarning("Advertencia", "Usuario y contraseña no pueden estar vacíos")
 
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
-        user = UserRepository.find_user(username, password)
+        user=Usuario.authenticate(username,password) #método de clase
+
         if user:
             messagebox.showinfo("Éxito", "Inicio de sesión exitoso")
-            self.open_booking_screen()
+            self.open_booking_screen(user)
         else:
             messagebox.showerror("Error", "Usuario o contraseña incorrectos")
 
-    def open_booking_screen(self):
+    def open_booking_screen(self,user):
+
         # Cierra la ventana actual
-        self.master.destroy()  # Cierra la ventana de login
+        self.master.withdraw()  # Cierra la ventana de login
 
         # Abre la nueva ventana de reservas
-        new_root = tk.Tk()  # Crea una nueva ventana raíz
-        app = BookingScreen(new_root)  # Crea una instancia de la pantalla de reservas
-        new_root.mainloop()  # Inicia el bucle de eventos de la nueva ventana
+        new_root = tk.Toplevel(self.master)  # Crea una nueva ventana raíz
+        app = BookingScreen(new_root,user)  # Crea una instancia de la pantalla de reservas
+        new_root.protocol("WM_DELETE_WINDOW", self.on_closing)  # Maneja el cierre de la nueva ventana
+
+    def on_closing(self):
+        self.master.destroy()  # Destruye la ventana principal cuando se cierra la ventana de reservas
 
 
 if __name__ == "__main__":

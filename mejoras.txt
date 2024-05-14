@@ -3,3 +3,15 @@ Esto se puede hacer usando bibliotecas de terceros como bcrypt en Python,
 
 
 - Usar una clase para controlar el flujo de la app
+
+- Comprobar formato de hora reserva, email usuario, teléfono usuario
+
+- Comprobar a la hora de hacer reservas que el coche no está reservado en ese momento
+
+- Añadir a la reserva un tiempo_calculado_reserva en función de distancia entre las dos direcciones
+
+- Filtrar también por coche de la flota
+
+- Jerarquía de herencia: usuarios como clase base, y separar administradores (los que se logan) de clientes (los que pueden alquilar coches)
+
+- Añadir posibilidad de añadir clientes y administradores solo si estás logado.

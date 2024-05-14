@@ -35,7 +35,7 @@ class ReservationRepository:
             conn.close()
 
     @staticmethod
-    def get_reservations():
+    def get_all_reservations():
         """
         Recupera todas las reservas de la base de datos.
         :return: list of tuples - Lista de reservas.
@@ -43,7 +43,7 @@ class ReservationRepository:
         conn = ReservationRepository._connect()
         cursor = conn.cursor()
         try:
-            cursor.execute('SELECT * FROM reservations')
+            cursor.execute('SELECT id_res, reservations.id_car, reservations.id_user, cars.marca, cars.modelo, users.username, fecha, hora, origen, destino FROM reservations,cars,users WHERE users.id_user=reservations.id_user and cars.car_id=reservations.id_car')
             reservations = cursor.fetchall()
             return reservations
         finally:
@@ -54,21 +54,40 @@ class ReservationRepository:
     def get_filtered_reservations(user_id=None, car_id=None):
         conn = ReservationRepository._connect()
         cursor = conn.cursor()
-        query = 'SELECT * FROM reservations'
+        query = 'SELECT id_res, reservations.id_car, reservations.id_user, cars.marca, cars.modelo, users.username, fecha, hora, origen, destino FROM reservations,cars,users WHERE users.id_user=reservations.id_user and cars.car_id=reservations.id_car '
+
         params = []
         conditions = []
 
         if user_id:
-            conditions.append('id_user = ?')
+            conditions.append('AND reservations.id_user = ?')
             params.append(user_id)
         if car_id:
-            conditions.append('id_car = ?')
+            conditions.append('AND reservations.id_car = ?')
             params.append(car_id)
 
         if conditions:
-            query += ' WHERE ' + ' AND '.join(conditions)
+            query += ' '.join(conditions)
 
         cursor.execute(query, tuple(params))
         results = cursor.fetchall()
         conn.close()
         return results
+
+    @staticmethod
+    def update_reservation(id_reserva, id_usuario, id_coche, fecha, hora, origen, destino):
+        conn = ReservationRepository._connect()
+        cursor = conn.cursor()
+        try:
+            cursor.execute('''
+                UPDATE reservations
+                SET id_user = ?, id_car = ?, fecha = ?, hora = ?, origen = ?, destino = ?
+                WHERE id_res = ?
+            ''', (id_usuario, id_coche, fecha, hora, origen, destino, id_reserva))
+            conn.commit()
+            return cursor.rowcount  # Devuelve el número de filas actualizadas
+        except sqlite3.Error as e:
+            print(f"Error al actualizar la reserva: {e}")
+            return 0  # Devuelve 0 si no se actualizaron filas
+        finally:
+            conn.close()

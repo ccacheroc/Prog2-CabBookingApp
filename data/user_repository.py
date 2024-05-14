@@ -29,9 +29,9 @@ class UserRepository:
         conn = UserRepository._connect()
         cursor = conn.cursor()
         try:
-            cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password))
+            cursor.execute('SELECT id_user, username, password FROM users WHERE username = ? AND password = ?', (username, password))
             user = cursor.fetchone()
-            return user is not None
+            return user #tupla con los tres datos
         finally:
             conn.close()
 
@@ -44,8 +44,8 @@ class UserRepository:
         conn = UserRepository._connect()
         cursor = conn.cursor()
         try:
-            cursor.execute('SELECT username FROM users')
+            cursor.execute('SELECT id_user,username,password,email, tfno_contacto FROM users')
             users = cursor.fetchall()
-            return users
+            return users #lista de tuplas
         finally:
             conn.close()

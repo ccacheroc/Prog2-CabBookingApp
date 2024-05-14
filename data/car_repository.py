@@ -43,7 +43,7 @@ class CarRepository:
         conn = CarRepository._connect()
         cursor = conn.cursor()
         try:
-            cursor.execute('SELECT marca, modelo FROM cars')
+            cursor.execute('SELECT car_id, matricula, marca, modelo, color FROM cars')
             cars = cursor.fetchall()
             return cars
         finally:
